@@ -47,7 +47,6 @@ int c_hashTable::getHash(char* word)
 	{
 		pos = pos + word[i] * key;
 		key = key * HASH_KEY;
-
 		i++;
 	}
 
@@ -66,14 +65,6 @@ c_hashTable::c_hashTable(unsigned int size)
 
 c_hashTable::~c_hashTable(void)
 {
-	int i = 0;
-
-	while(i < this->_size)
-	{
-		this->_data[i].~list();
-		i++;
-	}
-
 	delete [] this->_data;
 }
 
@@ -107,10 +98,15 @@ int c_hashTable::upload(const char* fileName)
 		if(enter != '\n')
 			return -2;
 
+		if(ret != 2)
+			break;
+
 		len = myStrlen(tmpStr) + 1;
 		str = new char [len];
+		//printf(">>> !%s!\n", tmpStr);
 		myStrcopy(str, tmpStr);
 		this->add(str);
+		delete [] str;
 		myStrclean(tmpStr, STR_SIZE);
 	}
 
@@ -153,7 +149,7 @@ int myStrcopy(char *strTo, char *strFrom)
 {
 	int i = 0;
 
-	while(strFrom[i] != '\0')
+	while(strFrom[i] != ' ' && strFrom[i] != '\n' && strFrom[i] != '\t' && strFrom[i] != '\0')
 	{
 		strTo[i] = strFrom[i];
 		i++;
@@ -176,7 +172,7 @@ int myStrlen(char *str)
 {
 	int i = 0;
 
-	while(str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
+	while(str[i] != ' ' && str[i] != '\n' && str[i] != '\t' && str[i] != '\0')
 		i++;
 
 	return i;
